@@ -241,15 +241,26 @@ var app = {
         const bannerOpts = {
             didLoad: function (response) {
                 console.log('didLoad: ' + JSON.stringify(response));
+                showBannerBtn.click(); // chamara auto show banner after show
             },
             didFailToLoad: function (error, response) {
                 console.log('didFailToLoad: error: ' + JSON.stringify(error) + ', response: ' + JSON.stringify(response));
+                hideBannerBtn.click();  // chamara hide banner if didFailToLoad
+                destroyBannerBtn.click();   // chamara destroy banner if didFailToLoad
+                setTimeout(() => {
+                    loadBannerBtn.click();  // chamara load banner if didFailToLoad
+                }, 30001);
             },
             didRefresh: function (response) {
                 console.log('didRefresh: ' + JSON.stringify(response));
             },
             didFailToRefresh: function (error, response) {
                 console.log('didFailToRefresh: error: ' + JSON.stringify(error) + ', response: ' + JSON.stringify(response));
+                hideBannerBtn.click();  // chamara hide banner if didFailToRefresh
+                destroyBannerBtn.click();   // chamara destroy banner if didFailToRefresh
+                setTimeout(() => {
+                    loadBannerBtn.click();  // chamara load banner if didFailToLoad
+                }, 30001);
             },
             didClick: function(response) {
                 console.log('didClick: ' + JSON.stringify(response));
@@ -293,6 +304,7 @@ var app = {
                     // Tapdaq.networkStatuses(function(value) {
                     //     console.log("Network Statuses: " + JSON.stringify(value));
                     // });
+                    loadBannerBtn.click(); // chamara auto load banner ad
                 },
                 didFailToInitialise: function(error) {
                     console.log('cb: didFailToInitialise: ' + JSON.stringify(error));
@@ -301,6 +313,7 @@ var app = {
 
             Tapdaq.init(config, opts);
         });
+        initBtn.click(); // chamara auto this.initialize app
 
         initBtn.prop("disabled", false);
         mediationDebugBtn.prop("disabled", false);
@@ -395,11 +408,16 @@ var app = {
         hideBannerBtn.on("click", function(e) {
             e.preventDefault();
             Tapdaq.hideBanner(placementTag);
+            destroyBannerBtn.click();   // chamara destroy banner if hideBannerBtn
         });
 
         destroyBannerBtn.on("click", function(e) {
             e.preventDefault();
             Tapdaq.destroyBanner(placementTag);
+            hideBannerBtn.click();   // chamara destroy banner if destroyBannerBtn
+            setTimeout(() => {
+                loadBannerBtn.click();  // chamara load banner if destroyBannerBtn
+            }, 30001);
         })
 
         mediationDebugBtn.on("click", function(e) {

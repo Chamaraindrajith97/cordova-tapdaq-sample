@@ -1,6 +1,7 @@
 # cordova-tapdaq-sample
 Cordova Ttapdaq Sample
 
+index.js  <br>
 
 // chamara auto show banner after show  <br>
 // chamara hide banner if didFailToLoad  <br>

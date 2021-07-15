@@ -2,7 +2,7 @@
 Cordova Ttapdaq Sample
 
 
-// chamara auto show banner after show
+// chamara auto show banner after show  <br>
 // chamara hide banner if didFailToLoad
 // chamara destroy banner if didFailToLoad
 // chamara load banner if didFailToLoad

@@ -7,8 +7,8 @@
 
 const config = {
     android: {
-      appId: "614f26fe08fe6c2d735d6e69", // edit
-      clientKey: "626dbf08-5bc2-4785-92d1-c3d9b000dc7b", //edit
+      appId: "", // edit
+      clientKey: "", //edit
     },
     banner: {
       placementTag: "default", // edit

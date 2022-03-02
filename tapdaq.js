@@ -7,12 +7,12 @@
 
 const config = {
     android: {
-      appId: "", // edit
-      clientKey: "", //edit
+      appId: "614f26fe08fe6c2d735d6e69", // edit
+      clientKey: "626dbf08-5bc2-4785-92d1-c3d9b000dc7b", //edit
     },
     banner: {
       placementTag: "default", // edit
-      bannerSize: "Standard", // edit
+      bannerSize: "smart", // edit
       bannerPosition: "bottom", //edit
     },
     video: {
@@ -22,6 +22,11 @@ const config = {
       placementTag: "default", // edit
     },
   };
+  
+  var bannerRefreshRate = 30001; //edit
+  var videoRefreshRate = 60000; //edit
+  var rewardRefreshRate = 60000; //edit
+  var faildAdRefreshRate = 30001; //edit
   
   var app = {
     initialize: function () {
@@ -74,6 +79,7 @@ const config = {
               ", response: " +
               JSON.stringify(response)
           );
+          app.startTimer(type, true);
         },
       };
       const bannerOpts = {
@@ -88,6 +94,7 @@ const config = {
               ", response: " +
               JSON.stringify(response)
           );
+          app.startTimer("banner", true);
         },
         didRefresh: function (response) {
           console.log("didRefresh: " + JSON.stringify(response));
@@ -99,6 +106,7 @@ const config = {
               ", response: " +
               JSON.stringify(response)
           );
+          app.destroyBanner();
         },
         didClick: function (response) {
           console.log("didClick: " + JSON.stringify(response));
@@ -131,6 +139,9 @@ const config = {
         },
         didDisplay: function (response) {
           console.log("didDisplay: " + JSON.stringify(response));
+          if (type == "video" || type == "reward") {
+            app.startTimer(type, false);
+          }
         },
         didFailToDisplay: function (error, response) {
           console.log(
@@ -182,17 +193,50 @@ const config = {
     },
     showVideo: function () {
       app.showAd("video");
-      app.loadAd("video");
     },
     showRewardedVideo: function () {
       app.showAd("reward");
-      app.loadAd("reward");
     },
     destroyBanner: function () {
       const Tapdaq = cordova.require("cordova-plugin-tapdaq.Tapdaq");
       Tapdaq.hideBanner(config.video.placementTag);
       Tapdaq.destroyBanner(config.video.placementTag);
-      app.loadAd("banner");
+      app.startTimer("banner", true);
+    },
+    startTimer: function (type, faild) {
+      var adTime = 30000;
+      if (faild == true) {
+        adTime = faildAdRefreshRate;
+      } else {
+        switch (type) {
+          case "banner":
+            adTime = bannerRefreshRate;
+            break;
+          case "video":
+            adTime = videoRefreshRate;
+            break;
+          case "reward":
+            adTime = rewardRefreshRate;
+            break;
+          default:
+            break;
+        }
+      }
+      setTimeout(() => {
+        switch (type) {
+          case "banner":
+            app.loadBanner();
+            break;
+          case "video":
+            app.loadVideo();
+            break;
+          case "reward":
+            app.loadRewardedVideo();
+            break;
+          default:
+            break;
+        }
+      }, adTime);
     },
   };
   app.initialize();
